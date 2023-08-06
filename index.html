@@ -3,7 +3,6 @@
 
 <head>
 <title>Adjustable Circle Image</title>
-<script src="https://unpkg.com/@turf/turf@6.5.0"></script>
 <style>
 #circle-image-container {
 position: relative;
@@ -71,7 +70,7 @@ font-family: Arial, sans-serif;
     You can get a rough estimate of the center by clicking to get the X-Y coordinates<br />
     3.Click on the location to obtain coordinates<br />
     <h3>Created by Ruyi Xu :). You can find me at <a href="https://www.linkedin.com/in/ruyi-xu-9463a6187/">Linkedin</a>
-    <br /> With help from Melody Cheng. You can find her at <a href="https://www.linkedin.com/in/melodytszchingcheng/">Linkedin</a></h3>
+        <br /> With help from Melody Cheng. You can find her at <a href="https://www.linkedin.com/in/melodytszchingcheng/">Linkedin</a></h3>
 </div>
 <div id="circle-controls">
 <label for="image-upload">Upload Image:</label>
@@ -242,7 +241,30 @@ const calculateCoordinates = (x, y) => {
 };
 
 
+const myCalculateCoordinates = (x, y) => {
+    
+    xyCoordinatesDisplay.textContent = `Pixel X: ${x.toFixed(2)}, Pixel Y: ${y.toFixed(2)}`;     
 
+    const dx = x - centerX;
+    const dy = y - centerY;
+    const distanceToCenter = Math.sqrt(dx * dx + dy * dy);
+
+    if (distanceToCenter < circleRadius) {
+        var xBuho = (dx > 0) ? 1 : -1;
+        var longitude = xBuho * Math.asin((Math.abs(dx) / circleRadius)) * 180 / Math.PI
+
+        var yBuho = (dy > 0) ? -1 : 1;             
+        var latitude =  yBuho * Math.asin((Math.abs(dy) / circleRadius)) * 180 / Math.PI;
+
+        
+        coordinatesDisplay.textContent = `Longitude: ${longitude.toFixed(2)}, Latitude: ${latitude.toFixed(2)}`;
+        coordinatesDisplay.style.display = 'block';
+        coordinatesDisplay.style.left = `${x}px`;
+        coordinatesDisplay.style.top = `${y}px`;  
+    } else {
+        coordinatesDisplay.style.display = 'none';
+    }
+}
 
 
 imageUpload.addEventListener('change', (event) => {
@@ -269,7 +291,8 @@ const rect = circleImageCanvas.getBoundingClientRect();
 clickX = event.clientX - rect.left;
 clickY = event.clientY - rect.top;
 
-calculateCoordinates(clickX, clickY);
+// calculateCoordinates(clickX, clickY);
+myCalculateCoordinates(clickX, clickY);
 });
 
 loadImage();
